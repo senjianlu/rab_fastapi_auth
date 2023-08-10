@@ -44,9 +44,9 @@ async def do_login(username: str, password: str, session):
     if not _verify_password(password, user.hashed_password):
         raise UsernameOrPasswordErrorException()
     # 3. 生成 token 令牌
-    access_token = token_biz.encode_token(current_user)
+    access_token = token_biz.encode_token(user)
     # 4. 将令牌存储到 Redis 中
-    access_token, masked_user_info = await token_biz.save_token_to_redis(access_token, current_user, request.app.state.redis)
+    access_token, masked_user_info = await token_biz.save_token_to_redis(access_token, user, request.app.state.redis)
     return access_token, masked_user_info
 
 async def do_logout(token: str, redis):
