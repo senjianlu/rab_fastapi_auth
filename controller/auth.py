@@ -95,7 +95,7 @@ async def startup():
 @ROUTER.post('/login')
 async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
     try:
-        access_token, masked_user_info = await auth_biz.do_login(form_data.username, form_data.password, request.app.state.session)
+        access_token, masked_user_info = await auth_biz.do_login(form_data.username, form_data.password, request.app.state.session, request.app.state.redis)
         return {"code": 200, "msg": "登录成功", "data": {"token": access_token, "user": masked_user_info}, "access_token": access_token, "token_type": "bearer"}
     except UserNotFoundException:
         raise UserNotFoundException

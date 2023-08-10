@@ -27,7 +27,7 @@ def _verify_password(plain_password: str, hashed_password: str):
     """
     return hashlib.sha256(plain_password.encode()).hexdigest() == hashed_password
 
-async def do_login(username: str, password: str, session):
+async def do_login(username: str, password: str, session, redis):
     """
     @description: 登录
     @param {str} username: 用户名
@@ -46,7 +46,7 @@ async def do_login(username: str, password: str, session):
     # 3. 生成 token 令牌
     access_token = token_biz.encode_token(user)
     # 4. 将令牌存储到 Redis 中
-    access_token, masked_user_info = await token_biz.save_token_to_redis(access_token, user, request.app.state.redis)
+    access_token, masked_user_info = await token_biz.save_token_to_redis(access_token, user, redis)
     return access_token, masked_user_info
 
 async def do_logout(token: str, redis):
