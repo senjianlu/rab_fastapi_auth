@@ -7,9 +7,6 @@
 # 外部模块
 [external]
   [external.rab_fastapi_auth]
-    [external.rab_fastapi_auth.style]
-    # 风格: default/antd
-    response = "antd"
     [external.rab_fastapi_auth.token]
     # Secret Key，生成方式: openssl rand -hex 32
     secret_key = "my_secret_key"

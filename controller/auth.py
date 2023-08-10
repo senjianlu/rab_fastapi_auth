@@ -22,7 +22,7 @@ from external.rab_fastapi_auth.models.Error import UserNotFoundException, Userna
 
 
 # FastAPI 风格相关配置
-FASTAPI_AUTH_STYLE_CONFIG = external_rab_common_config.CONFIG["external"]["rab_fastapi_auth"]["style"]
+# FASTAPI_AUTH_STYLE_CONFIG = external_rab_common_config.CONFIG["external"]["rab_fastapi_auth"]["style"]
 # FastAPI 认证路由相关配置
 FASTAPI_AUTH_ROUTER_CONFIG = external_rab_common_config.CONFIG["external"]["rab_fastapi_auth"]["router"]
 # OAuth2 密码模式
@@ -68,27 +68,28 @@ async def startup():
     admin_biz.load_config_admin()
     print("FastAPI - 认证路由 - 配置文件 Admin 加载完成。")
 
-@ROUTER.middleware("http")
-async def handle_response_style(request: Request, call_next):
-    """
-    @description: 截取所有请求，并修改 response 的格式风格
-    """
-    response_style = FASTAPI_AUTH_STYLE_CONFIG["response"]
-    # 1. Ant Design Pro 风格
-    if response_style == "antd":
-        response = await call_next(request)
-        # 1.1 正常响应
-        if response.status_code == 200:
-            advance_response = response.body
-            del advance_response["code"]
-            del advance_response["msg"]
-            del advance_response["data"]
-            return {"success": True, "data": response.body["data"], code: response.body["code"], message: response.body["msg"], **advance_response}
-        # 1.2 失败响应
-        else:
-            return {"success": False, "data": response.body["data"], errorCode: response.body["code"], errorMessage: response.body["msg"]}
-    else:
-        return await call_next(request)
+# 无法对 APIRouter 添加中间件，因此暂时注释掉
+# @ROUTER.middleware("http")
+# async def handle_response_style(request: Request, call_next):
+#     """
+#     @description: 截取所有请求，并修改 response 的格式风格
+#     """
+#     response_style = FASTAPI_AUTH_STYLE_CONFIG["response"]
+#     # 1. Ant Design Pro 风格
+#     if response_style == "antd":
+#         response = await call_next(request)
+#         # 1.1 正常响应
+#         if response.status_code == 200:
+#             advance_response = response.body
+#             del advance_response["code"]
+#             del advance_response["msg"]
+#             del advance_response["data"]
+#             return {"success": True, "data": response.body["data"], code: response.body["code"], message: response.body["msg"], **advance_response}
+#         # 1.2 失败响应
+#         else:
+#             return {"success": False, "data": response.body["data"], errorCode: response.body["code"], errorMessage: response.body["msg"]}
+#     else:
+#         return await call_next(request)
     
 
 @ROUTER.post('/login')
