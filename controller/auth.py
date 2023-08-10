@@ -83,7 +83,7 @@ async def handle_response_style(request: Request, call_next):
             del advance_response["code"]
             del advance_response["msg"]
             del advance_response["data"]
-            return {"success": True, "data": response.body["data"], code: response.body["code"], message: response.body["msg"], ...advance_response}
+            return {"success": True, "data": response.body["data"], code: response.body["code"], message: response.body["msg"], **advance_response}
         # 1.2 失败响应
         else:
             return {"success": False, "data": response.body["data"], errorCode: response.body["code"], errorMessage: response.body["msg"]}
